@@ -1,11 +1,13 @@
 package com.b2w.processoseletivo.springboot.Presentation.Models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @ToString
 @Document(collection = "planets")
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Planets {
     @Id
     private int id;

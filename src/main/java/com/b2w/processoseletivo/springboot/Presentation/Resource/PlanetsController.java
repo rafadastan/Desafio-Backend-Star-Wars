@@ -2,6 +2,7 @@ package com.b2w.processoseletivo.springboot.Presentation.Resource;
 
 import com.b2w.processoseletivo.springboot.Presentation.Models.Planets;
 import com.b2w.processoseletivo.springboot.Repositories.Contracts.PlanetsRepository;
+import com.b2w.processoseletivo.springboot.application.PlanetService;
 import com.sun.xml.internal.ws.api.message.ExceptionHasMessage;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -20,11 +21,13 @@ public class PlanetsController {
 
     @Autowired
     private PlanetsRepository repository;
+    private PlanetService service;
 
     @ApiOperation(value = "Save Planets")
     @PostMapping("/addPlanet")
     public ResponseEntity<Planets> savePlanet(@RequestBody Planets planet) {
         Planets result = repository.save(planet);
+
         try {
             return ResponseEntity.ok().body(planet);
         } catch (Exception e) {

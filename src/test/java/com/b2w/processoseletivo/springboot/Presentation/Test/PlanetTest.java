@@ -8,7 +8,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponents;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -20,12 +24,30 @@ import static org.mockito.Mockito.*;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class PlanetTest {
 
+    RestTemplate template = new RestTemplate();
+
     @Value("${local.server.port}")
     protected int port;
 
     @Autowired
     @MockBean
     private PlanetsRepository repository;
+
+    @Test
+    public void consumerApi(){
+        //https://swapi.dev/api/planets/?search=Tatooine
+
+        UriComponents uri = UriComponentsBuilder.newInstance()
+                .scheme("https")
+                .host("swapi.dev")
+                .path("api/planets")
+                .queryParam("search", "Tatooine")
+                .build();
+
+        ResponseEntity<Planets> entity = template.getForEntity(uri.toUriString(), Planets.class);
+
+        System.out.println(entity.getBody().getName());
+    }
 
     @Test
     public void getPlanetsTest(){
